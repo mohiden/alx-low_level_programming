@@ -6,5 +6,7 @@ char *_memset(char *a, char x, unsigned int b);
 char *_memcpy(char *dest, char *src, unsigned int n);
 char *_strchr(char *s, char c);
 unsigned int _strspn(char *s, char *accept);
+char *strpbrk(char *s, char *accept);
+char *strstr(char *haystack, char *needle);
 
 #endif
