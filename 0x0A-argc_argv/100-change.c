@@ -12,25 +12,20 @@
 
 int main(int argc, char *argv[])
 {
+	int cents, count;
+
 	if (argc != 2)
 	{
 		printf("Error\n");
 		return (1);
 	}
 
-	int cents;
-
 	cents = atoi(argv[1]);
-
 	if (cents < 0)
 	{
 		printf("0\n");
 		return (0);
 	}
-
-
-	int count;
-
 	while (cents > 0)
 	{
 		if (cents >= 25)
@@ -57,7 +52,6 @@ int main(int argc, char *argv[])
 	}
 	printf("%d\n", count);
 	return (0);
-
 }
 
 
