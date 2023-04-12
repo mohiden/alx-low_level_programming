@@ -2,53 +2,62 @@
 #include <stdlib.h>
 
 /**
- * argstostr - concatenates all the arguments of your program.
- * @ac: int
- * @av: array of strings
+ * _strlen - helper function to get string length
+ * @s: string to evaluate
  *
- * Return: char
+ * Return: length of string
  */
-
-char *argstostr(int ac, char **av)
+int _strlen(char *s)
 {
-	char *result;
-	int i, j, len;
+    int len = 0;
 
-	if (ac == 0 || av == NULL)
-		return (NULL);
-	i = 0;
-	while (i < ac)
-	{
-		j = 0;
-		while (av[i][j])
-		{
-			len++;
-			j++;
-		}
-		len++;
-		i++;
-	}
-	result = malloc((sizeof(char) * len) + 1);
-	if (result == NULL)
-		return (NULL);
-	i = 0;
-	len = 0;
-	while (i < ac)
-	{
-		j = 0;
-		while (av[i][j])
-		{
-			result[len] = av[i][j];
-			j++;
-			len++;
-		}
-		result[len] = '\n';
-		len++;
-		i++;
-	}
-	av[len] = '\0';
+    while (*s != '\0')
+    {
+        len++;
+        s++;
+    }
 
-	return (result);
+    return (len);
 }
 
+/**
+ * argstostr - concatenates all arguments of the program.
+ * @ac: argument count.
+ * @av: pointer to array of size ac.
+ *
+ * Return: NULL if ac == 0 or av == NULL, Pointer to new string.
+ * NULL on fail.
+ */
+char *argstostr(int ac, char **av)
+{
+    int i, j, k, size;
+    char *arg;
+
+    size = 0;
+    k = 0;
+
+    if (ac == 0 || av == NULL)
+        return (NULL);
+
+    for (i = 0; i < ac; i++)
+        size += _strlen(av[i]) + 1;
+
+    arg = malloc(sizeof(char) * size);
+    if (arg == NULL)
+        return (NULL);
+
+    for (i = 0; i < ac; i++)
+    {
+        for (j = 0; av[i][j] != '\0'; j++)
+        {
+            arg[k] = av[i][j];
+            k++;
+        }
+        arg[k] = '\n';
+        k++;
+    }
+    arg[k] = '\0';
+
+    return (arg);
+}
 
