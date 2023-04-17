@@ -1,8 +1,5 @@
 #ifndef DOG_H
 #define DOG_H
-#include <stdlib.h>
-
-
 /**
  * struct dog - define new struct
  * @name: char
@@ -16,5 +13,6 @@ struct dog
 	float age;
 	char *owner;
 }
-
 #endif
+
+
