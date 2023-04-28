@@ -4,7 +4,7 @@
 
 /**
  * add_node - adds a new node at the beginning of a list
- * @h: poniter to list_t
+ * @head: poniter to list_t
  * @str: string
  *
  * Return: list_t
