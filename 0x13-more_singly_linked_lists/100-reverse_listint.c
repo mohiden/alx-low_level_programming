@@ -3,7 +3,7 @@
 /**
  * reverse_listint - reverse a list of listint_t
  * @head: double pointer to listint_t
- * 
+ *
  * Return: pointer to listint_t
  */
 
