@@ -10,14 +10,18 @@
 
 void print_binary(unsigned long int n)
 {
-	if (n == 0)
+	int i, shift;
+
+	shift = sizeof(unsigned long int) * 8 - 1;
+
+	while ((n >> shift) == 0 && shift > 0)
+		shift--;
+
+	for (i = shift; i >= 0; i--)
 	{
-		printf("0");
-		return;
+		if ((n >> i) & 1)
+			printft("1");
+		else
+			printf("0");
 	}
-
-	if (n > 1)
-		print_binary(n >> 1);
-	printf("%d", (n & 1) ? 1 : 0);
-
 }
