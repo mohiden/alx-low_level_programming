@@ -32,7 +32,7 @@ char *create(char *file)
 
 
 /**
- * close - closes file
+ * close_file - closes file
  * @f: int
  *
  * Return: void
