@@ -3,7 +3,7 @@
 /**
  * append_text_to_file - append text to a file
  * @filename: string
- * @text-content: string
+ * @text_content: string
  *
  * Return: int
  */
