@@ -31,7 +31,7 @@ void error_exit(int code, const char *message, const char *arg)
 int main(int argc, char *argv[])
 {
 	int fd_from, fd_to;
-	char *buffer[BUFFER_SIZE];
+	char *buffer;
 	ssize_t n_read, n_written;
 
 	if (argc != 3)
@@ -47,6 +47,12 @@ int main(int argc, char *argv[])
 	if (fd_to == -1)
 		error_exit(99, "Error: Can't write to %s\n", argv[2]);
 
+	buffer = malloc(sizeof(char) * BUFFER_SIZE);
+
+	if (buffer == NULL)
+	{
+		error_exit(99, "Error: Can't write to %s\n", argv[2]);
+	}
 
 	while ((n_read = read(fd_from, buffer, BUFFER_SIZE)) > 0)
 	{
