@@ -2,80 +2,99 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFFER_SIZE 1024
-void error_exit(int code, const char *message, const char *arg);
+#define BUFFER_SIZE  1024
+
+char *create(char *file);
+void close_file(int f);
+
 
 /**
- * error_exit - exit if error
- * @code: int
- * @message: string
- * @arg: string
+ * create - Allocates new space in memory
+ * @file: string
  *
- * Return: void
+ * Return: string
  */
 
-void error_exit(int code, const char *message, const char *arg)
+char *create(char *file)
 {
-	dprintf(STDERR_FILENO, message, arg);
-	exit(code);
-}
-
-/**
- * main - copies fileA content to fileB
- * @argc: int
- * @argv: array of strings
- *
- * Return: int
- */
-
-int main(int argc, char *argv[])
-{
-	int fd_from, fd_to;
 	char *buffer;
-	ssize_t n_read, n_written;
-
-	if (argc != 3)
-		error_exit(98, "Usage: cp file_from file_to\n", "");
-
-	fd_from = open(argv[1], O_RDONLY);
-
-	if (fd_from == -1)
-		error_exit(98, "Error: Can't read from file %s\n", argv[1]);
-
-	fd_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-
-	if (fd_to == -1)
-		error_exit(99, "Error: Can't write to %s\n", argv[2]);
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE);
 
 	if (buffer == NULL)
 	{
-		error_exit(99, "Error: Can't write to %s\n", argv[2]);
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file);
+		exit(99);
 	}
 
-	while ((n_read = read(fd_from, buffer, BUFFER_SIZE)) > 0)
-	{
-		n_written = write(fd_to, buffer, n_read);
-		if (n_written == -1)
-			error_exit(99, "Error: Can't write to %s\n", argv[2]);
-		if (n_written != n_read)
-			error_exit(99, "Error: Short write to %s\n", argv[2]);
-	}
-	if (n_read == -1)
-		error_exit(99, "Error: Can't read from file %s\n", argv[1]);
-	if (close(fd_from) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from);
-		exit(100);
-	}
-	if (close(fd_to) == -1)
-	{
+	return (buffer);
+}
 
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to);
+
+/**
+ * close - closes file
+ * @f: int
+ *
+ * Return: void
+ */
+void close_file(int f)
+{
+	if (close(f) == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close f %d\n", f);
 		exit(100);
 	}
+}
+
+
+/**
+ * main - copies fileA content to fileB
+ * @argc: int
+ * @argv: array of string
+ *
+ * Return: void
+ */
+
+int main(int argc, char *argv[])
+{
+	int from, to, re, rw;
+	char *buffer;
+
+	if (argc != 3)
+	{
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
+	}
+	buffer = create(argv[2]);
+	from = open(argv[1], O_RDONLY);
+	re = read(from, buffer, BUFFER_SIZE);
+	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+
+	do {
+		if (from == -1 || re == -1)
+		{
+
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[2]);
+			free(buffer);
+			exit(98);
+		}
+		rw = write(to, buffer, re);
+
+		if (to == -1 || rw == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", argv[2]);
+			free(buffer);
+			exit(99);
+		}
+		re = read(from, buffer, BUFFER_SIZE);
+		to = open(argv[2], O_WRONLY | O_APPEND);
+
+	} while (rw > 0);
 
 	free(buffer);
+	close_file(from);
+	close_file(to);
+
 	return (0);
 }
+
