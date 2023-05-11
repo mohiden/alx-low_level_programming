@@ -39,6 +39,7 @@ char *create(char *file)
 void close_file(int f)
 {
 	int cl;
+
 	cl = close(f);
 	if (cl == -1)
 	{
